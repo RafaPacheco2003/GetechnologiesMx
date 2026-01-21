@@ -1,9 +1,5 @@
 namespace GetechnologiesMx.Domain.Exceptions;
 
-/// <summary>
-/// Excepción cuando ya existe una entidad (duplicado)
-/// Equivalente a DuplicateException o ConflictException en Spring Boot
-/// </summary>
 public class AlreadyExistsException : Exception
 {
     public AlreadyExistsException(string message) : base(message)

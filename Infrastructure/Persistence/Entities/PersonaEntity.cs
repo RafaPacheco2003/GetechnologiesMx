@@ -9,7 +9,5 @@ public class PersonaEntity
     public string Identificacion { get; set; } = string.Empty;
     public DateTime FechaCreacion { get; set; }
     public DateTime FechaActualizacion { get; set; }
-
-    // Relación: Una Persona tiene muchas Facturas
     public ICollection<FacturaEntity> Facturas { get; set; } = new List<FacturaEntity>();
 }
