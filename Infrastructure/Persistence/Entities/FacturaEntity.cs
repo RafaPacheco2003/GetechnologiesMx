@@ -7,9 +7,9 @@ public class FacturaEntity
     public decimal Monto { get; set; }    
     public DateTime Fecha { get; set; }
     
-    // Foreign Key: Una Factura pertenece a una Persona
+    
     public int PersonaId { get; set; }
     
-    // Navigation Property: Relación ManyToOne
+    
     public PersonaEntity Persona { get; set; } = null!;
 }

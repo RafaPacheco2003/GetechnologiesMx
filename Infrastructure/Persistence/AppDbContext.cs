@@ -28,7 +28,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.FechaCreacion).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.FechaActualizacion).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            // Relación: Una Persona tiene muchas Facturas
+            
             entity.HasMany(p => p.Facturas)
                   .WithOne(f => f.Persona)
                   .HasForeignKey(f => f.PersonaId)
