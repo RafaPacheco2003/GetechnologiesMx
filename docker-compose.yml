@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    image: getechnologiesmx_app:latest
+    ports:
+      - '5001:5000'
+    volumes:
+      - data:/app/Data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Data Source=/app/Data/app.db
+
+volumes:
+  data:
+    driver: local
