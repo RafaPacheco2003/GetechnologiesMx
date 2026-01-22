@@ -361,6 +361,149 @@ Runner: `ubuntu-latest`
 - Reportes de tests visibles en la UI de GitHub Actions
 - Tests se ejecutan siempre (`if: always()`) para ver resultados incluso si fallan
 
+## 🔌 API Endpoints
+
+### Base URL
+```
+http://localhost:5001/api
+```
+
+### Health Check
+
+```bash
+curl -X GET http://localhost:5001/api/health
+```
+
+### Personas
+
+#### Crear Persona
+```bash
+curl -X POST http://localhost:5001/api/personas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Juan",
+    "apellidoPaterno": "Pérez",
+    "apellidoMaterno": "García",
+    "identificacion": "RFC12345"
+  }'
+```
+
+#### Crear Persona sin Apellido Materno (opcional)
+```bash
+curl -X POST http://localhost:5001/api/personas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "María",
+    "apellidoPaterno": "López",
+    "apellidoMaterno": null,
+    "identificacion": "RFC67890"
+  }'
+```
+
+#### Listar Todas las Personas
+```bash
+curl -X GET http://localhost:5001/api/personas
+```
+
+#### Buscar Persona por Identificación
+```bash
+curl -X GET http://localhost:5001/api/personas/identificacion/RFC12345
+```
+
+#### Eliminar Persona por Identificación
+```bash
+curl -X DELETE http://localhost:5001/api/personas/identificacion/RFC12345
+```
+
+### Facturas
+
+#### Crear Factura
+```bash
+curl -X POST http://localhost:5001/api/facturas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "numeroFactura": "FAC-001",
+    "monto": 1500.50,
+    "fecha": "2026-01-21T10:30:00",
+    "personaId": 1
+  }'
+```
+
+#### Crear Segunda Factura
+```bash
+curl -X POST http://localhost:5001/api/facturas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "numeroFactura": "FAC-002",
+    "monto": 2500.75,
+    "fecha": "2026-01-21T11:00:00",
+    "personaId": 1
+  }'
+```
+
+#### Listar Facturas de una Persona
+```bash
+curl -X GET http://localhost:5001/api/facturas/persona/1
+```
+
+### Validaciones
+
+#### Intentar Crear Persona con Identificación Duplicada (debe fallar)
+```bash
+curl -X POST http://localhost:5001/api/personas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Pedro",
+    "apellidoPaterno": "Gómez",
+    "apellidoMaterno": "Ruiz",
+    "identificacion": "RFC12345"
+  }'
+```
+
+#### Intentar Crear Factura con Número Duplicado (debe fallar)
+```bash
+curl -X POST http://localhost:5001/api/facturas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "numeroFactura": "FAC-001",
+    "monto": 3000.00,
+    "fecha": "2026-01-21T12:00:00",
+    "personaId": 1
+  }'
+```
+
+### Flujo Completo de Prueba
+
+```bash
+# 1. Health check
+curl -X GET http://localhost:5001/api/health
+
+# 2. Crear persona
+curl -X POST http://localhost:5001/api/personas \
+  -H "Content-Type: application/json" \
+  -d '{"nombre": "Juan", "apellidoPaterno": "Pérez", "apellidoMaterno": "García", "identificacion": "RFC12345"}'
+
+# 3. Listar todas las personas
+curl -X GET http://localhost:5001/api/personas
+
+# 4. Buscar persona por identificación
+curl -X GET http://localhost:5001/api/personas/identificacion/RFC12345
+
+# 5. Crear factura para la persona
+curl -X POST http://localhost:5001/api/facturas \
+  -H "Content-Type: application/json" \
+  -d '{"numeroFactura": "FAC-001", "monto": 1500.50, "fecha": "2026-01-21T10:30:00", "personaId": 1}'
+
+# 6. Listar facturas de la persona
+curl -X GET http://localhost:5001/api/facturas/persona/1
+
+# 7. Eliminar persona
+curl -X DELETE http://localhost:5001/api/personas/identificacion/RFC12345
+
+# 8. Verificar eliminación
+curl -X GET http://localhost:5001/api/personas
+```
+
 ## Estrategia de Commits
 
 ### Convenciones (Conventional Commits)

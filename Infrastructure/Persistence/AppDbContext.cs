@@ -40,6 +40,7 @@ public class AppDbContext : DbContext
             entity.ToTable("Facturas");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.NumeroFactura).IsRequired().HasMaxLength(50);
+            entity.HasIndex(e => e.NumeroFactura).IsUnique();
             entity.Property(e => e.Monto).IsRequired().HasColumnType("decimal(18,2)");
             entity.Property(e => e.Fecha).IsRequired();
             entity.Property(e => e.PersonaId).IsRequired();

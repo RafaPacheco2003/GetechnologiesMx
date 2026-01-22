@@ -3,6 +3,7 @@ using GetechnologiesMx.Application.UseCases;
 using GetechnologiesMx.Domain.Port.In;
 using GetechnologiesMx.Domain.Port.In.Factura;
 using GetechnologiesMx.Domain.Port.Out;
+using GetechnologiesMx.Infrastructure.Adapters;
 using GetechnologiesMx.Infrastructure.Persistence;
 using GetechnologiesMx.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Repositories (Port Out -> Adapter)
 builder.Services.AddScoped<PersonaRepositoryPort, PersonaRepositoryAdapter>();
 builder.Services.AddScoped<FacturaRepositoryPort, FacturaRepositoryAdapter>();
+
+builder.Services.AddScoped<ILoggerPort, LoggerAdapter>();
 
 // Persona Use Cases (Port In -> Implementation)
 builder.Services.AddScoped<StorePersonaUseCase, StorePersonaUseCaseImpl>();

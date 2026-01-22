@@ -23,7 +23,7 @@ public static class PersonaMapper
     {
         return new PersonaEntity
         {
-            Id = model.Id ?? 0, // Si es null (nuevo), EF asignará el Id
+            Id = model.Id ?? 0, 
             Nombre = model.Nombre,
             ApellidoPaterno = model.ApellidoPaterno,
             ApellidoMaterno = model.ApellidoMaterno,
@@ -45,18 +45,22 @@ public static class PersonaMapper
             apellidoMaterno: entity.ApellidoMaterno
         )
         {
-            Id = entity.Id // Asignar el Id de la Entity al Model
+            Id = entity.Id 
         };
     }
 
     //  ENTITY -> RESPONSE DTO
         public static PersonaResponse ToResponse(this PersonaEntity entity)
     {
+        string nombreCompleto = $"{entity.Nombre} {entity.ApellidoPaterno}";
+        if (!string.IsNullOrEmpty(entity.ApellidoMaterno))
+        {
+            nombreCompleto += $" {entity.ApellidoMaterno}";
+        }
+        
         return new PersonaResponse(
             Id: entity.Id,
-            Nombre: entity.Nombre,
-            ApellidoPaterno: entity.ApellidoPaterno,
-            ApellidoMaterno: entity.ApellidoMaterno,
+            NombreCompleto: nombreCompleto,
             Identificacion: entity.Identificacion
         );
     }
@@ -64,16 +68,19 @@ public static class PersonaMapper
     //  DOMAIN MODEL -> RESPONSE DTO
     public static PersonaResponse ToResponse(this Persona model)
     {
+        string nombreCompleto = $"{model.Nombre} {model.ApellidoPaterno}";
+        if (!string.IsNullOrEmpty(model.ApellidoMaterno))
+        {
+            nombreCompleto += $" {model.ApellidoMaterno}";
+        }
+        
         return new PersonaResponse(
-            Id: model.Id ?? 0, // Si es null, usa 0 (no debería pasar si viene de BD)
-            Nombre: model.Nombre,
-            ApellidoPaterno: model.ApellidoPaterno,
-            ApellidoMaterno: model.ApellidoMaterno,
+            Id: model.Id ?? 0, 
+            NombreCompleto: nombreCompleto,
             Identificacion: model.Identificacion
         );
     }
 
-    //  CONVERSIONES
     public static IEnumerable<PersonaResponse> ToResponseList(this IEnumerable<PersonaEntity> entities)
     {
         return entities.Select(entity => entity.ToResponse());
@@ -84,7 +91,6 @@ public static class PersonaMapper
         return entities.Select(entity => entity.ToModel());
     }
 
-    // LISTA DE MODELS -> LISTA DE RESPONSES
     public static IEnumerable<PersonaResponse> ToResponseList(this IEnumerable<Persona> models)
     {
         return models.Select(model => model.ToResponse());
